@@ -20,7 +20,6 @@ module.exports = class AutoAPI {
 
   load() {
     this.#mapDir(this.src);
-    console.log(this.#endpoints);
     this.#registerEndpoints();
   }
 
