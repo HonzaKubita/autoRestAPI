@@ -13,7 +13,7 @@ To use AutoAPI, you'll need to create a new instance of the AutoAPI class. Here'
 ```js
 const AutoAPI = require('./autoapi.js');
 
-const api = new AutoAPI(); // No configuration uses default values (port: 3001, src: "./endpoints")
+const api = new AutoAPI(); // No configuration uses default values (port: 3001, src: "./api")
 
 api.load(); // Load and register all endpoints
 
@@ -28,16 +28,16 @@ The `load()` method scans the directory specified in the src option and maps all
 The `listen()` method starts the Express.js server and listens on the specified port.
 
 ### Endpoints
-Endpoints should be organized in a directory structure within the directory specified in the src option (default ./endpoints). Each endpoint should be a separate JavaScript file that exports an object with methods for each supported HTTP method (e.g. get, post, put, etc.).
+Endpoints should be organized in a directory structure within the directory specified in the src option (default ./api). Each endpoint should be a separate JavaScript file that exports an object with methods for each supported HTTP method (e.g. get, post, put, etc.).
 
 Example file structure:
 
 ```
 |
-|-- endpoints
-|      | -- getSomeData.js
-|      | -- getSomeOtherData.js
-|      | -- other
+|-- api
+|    | -- getSomeData.js
+|    | -- getSomeOtherData.js
+|    | -- other
 |             | -- getSomeOtherData.js
 |-- autoapi.js
 ```

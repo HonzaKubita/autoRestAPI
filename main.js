@@ -11,7 +11,7 @@ module.exports = class AutoAPI {
 
   constructor(config = {}) {
     this.port = config.port?? 3001;
-    this.src = config.src?? "./endpoints";
+    this.src = config.src?? "./api";
   }
 
   listen(port = this.port, callback) {
