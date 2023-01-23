@@ -58,10 +58,10 @@ Here's an example of an endpoint file:
 ```js
 module.exports = {
   get: (req, res) => {
-    res.json({ message: 'Hello, World!' });
+    res.send({ message: 'Hello, World!' });
   },
   post: (req, res) => {
-    res.json({ message: 'Received a POST request' });
+    res.send({ message: 'Received a POST request' });
   }
 };
 ```
