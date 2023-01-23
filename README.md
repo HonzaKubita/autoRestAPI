@@ -1,6 +1,6 @@
 # AutoAPI
 
-AutoAPI is a simple, lightweight library for building RESTful APIs quickly and easily. It allows you to organize your endpoints in a directory structure, and automatically loads and registers them with an instance of Express.js.
+AutoAPI is a simple utility for automatically mapping and registering endpoints in an Express.js application. It allows you to organize your endpoints in a directory structure and automatically register them with the Express.js app, without the need to manually import and register each endpoint.
 
 ## Instalation
 
@@ -8,24 +8,30 @@ Unfortunately I didn't create an npm package for this yet. So you have to manual
 
 ## Usage
 
-To use AutoAPI, you'll need to create a new instance of the AutoAPI class. Here's an example of how to do that:
+To use AutoAPI in your Express.js app, you'll need to require it at the top of your server file:
 
 ```js
 const AutoAPI = require('./autoapi.js');
 
-const api = new AutoAPI(); // No configuration uses default values (port: 3001, src: "./api")
-
-api.load(); // Load and register all endpoints
-
-api.listen(3000, () => {
-  console.log('API listening on port 3000');
-});
-
 ```
 
-The `load()` method scans the directory specified in the src option and maps all the endpoint files to an Express.js server.
+Then, you'll need to initialize it by passing in your Express.js app and optionally a configuration object:
 
-The `listen()` method starts the Express.js server and listens on the specified port.
+Without configuration:
+
+```js
+AutoAPI(app);
+```
+
+With configuration:
+
+```js
+AutoAPI(app, { src: './api' });
+```
+
+The configuration object allows you to specify the source directory where your endpoints are located. If no src property is provided, the default value is './api'.
+
+AutoAPI maps all endpoint files located in the source directory and its subdirectories. All files should be in .js format. (Files with other extensions are ignored.)
 
 ### Endpoints
 Endpoints should be organized in a directory structure within the directory specified in the src option (default ./api). Each endpoint should be a separate JavaScript file that exports an object with methods for each supported HTTP method (e.g. get, post, put, etc.).
@@ -62,5 +68,20 @@ module.exports = {
 
 In this example, the endpoint supports the GET and POST HTTP methods. When the load() method is called, AutoAPI will automatically register these methods with Express.js and map them to the correct URL based on the file's location within the src directory.
 
+## Full inplementation example
+
+```js
+const express = require('express');
+const AutoAPI = require('auto-api');
+
+const app = express();
+
+AutoAPI(app, { src: './api' });
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000!');
+});
+```
+
 ## Conclusion
-AutoAPI makes it easy to build a RESTful API by allowing you to organize your endpoints in a directory structure, and automatically loads and registers them with an instance of Express.js. It's lightweight, easy to use and it's perfect for small and medium-sized projects that don't require a heavy framework.
+AutoAPI makes it easy to organize and register your endpoints for an existing Express.js application. By using the directory structure and naming conventions, you can keep your endpoints organized and easily identify them. You can also easily add, modify, or delete endpoints without having to manually import or register them in the Express.js app.

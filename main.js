@@ -1,70 +1,59 @@
 const fs = require('fs');
-const express = require('express');
 
-let port = 3001;
+let endpoints = [];
+let express = null;
+let config = {};
 
-module.exports = class AutoAPI {
+function mapDir(path) {
+  const contents = fs.readdirSync(path);
+  const endpointFiles = contents.filter(file => file.endsWith('.js'));
+  const dirs = contents.filter(file => fs.statSync(`${path}/${file}`).isDirectory());
 
-  #express = express(); // Private instance of express app
+  endpointFiles.forEach(file => { // Map all endpoint files
+    const script = require(`${path}/${file}`);
+    const fileName = file.replace(".js", "");
 
-  #endpoints = [];
+    let endpointObject = {
+      script: script,           // Object from the file
+      url: (`${path.replace(".", "")}/${fileName}`), // Url in the api
+      path: (`${path}/${file}`),    // Path to the source file
+      methods: [],                  // Supported http methods
+    }
 
-  constructor(config = {}) {
-    this.port = config.port?? 3001;
-    this.src = config.src?? "./api";
-  }
+    const httpMethods = ['get', 'head', 'post', 'put', 'delete', 'options', 'trace', 'patch'];
 
-  listen(port = this.port, callback) {
-    this.#express.listen(port, callback);
-  }
-
-  load() {
-    this.#mapDir(this.src);
-    this.#registerEndpoints();
-  }
-
-  #mapDir(path) {
-    const contents = fs.readdirSync(path);
-    const endpointFiles = contents.filter(file => file.endsWith('.js'));
-    const dirs = contents.filter(file => fs.statSync(`${path}/${file}`).isDirectory());
-
-    endpointFiles.forEach(file => { // Map all endpoint files
-      const script = require(`${path}/${file}`);
-      const fileName = file.replace(".js", "");
-
-      let endpointObject = {
-        script: script,           // Object from the file
-        url: (`${path.replace(this.src, "")}/${fileName}`), // Url in the api
-        path: (`${path}/${file}`),    // Path to the source file
-        methods: [],                  // Supported http methods
-      }
-
-      const httpMethods = ['get', 'head', 'post', 'put', 'delete', 'options', 'trace', 'patch'];
-
-      httpMethods.forEach(method => { // Map all supported http methods
-        if (method in endpointObject.script) {
-          if (typeof endpointObject.script[method] === 'function') {
-            endpointObject.methods.push(method);
-          }
+    httpMethods.forEach(method => { // Map all supported http methods
+      if (method in endpointObject.script) {
+        if (typeof endpointObject.script[method] === 'function') {
+          endpointObject.methods.push(method);
         }
-      });
-
-      this.#endpoints.push(endpointObject); // Add endpoint to main endpoints array
-
+      }
     });
 
-    dirs.forEach(dir => {
-      this.#mapDir(`${path}/${dir}`);
-    })
+    endpoints.push(endpointObject); // Add endpoint to main endpoints array
 
-  }
+  });
 
-  #registerEndpoints() {
-    this.#endpoints.forEach(endpoint => {
-      endpoint.methods.forEach(method => {
-        this.#express[method](endpoint.url, endpoint.script[method]);
-      });
+  dirs.forEach(dir => {
+    mapDir(`${path}/${dir}`);
+  })
+
+}
+
+function registerEndpoints() {
+  endpoints.forEach(endpoint => {
+    endpoint.methods.forEach(method => {
+      express[method](endpoint.url, endpoint.script[method]);
     });
-  }
+  });
+}
+
+module.exports = AutoAPI = (expressApp, conf = {}) => {
+
+  express = expressApp;
+  config.src = conf.src?? "./api";
+
+  mapDir(config.src);
+  registerEndpoints();
 
 }
