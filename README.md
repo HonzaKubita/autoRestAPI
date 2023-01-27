@@ -15,7 +15,7 @@ npm i @honzakubita/autoapi
 To use AutoAPI in your Express.js app, you'll need to require it at the top of your server file:
 
 ```js
-const AutoAPI = require('./autoapi.js');
+const AutoAPI = require('@honzakubita/autoapi');
 
 ```
 
@@ -76,7 +76,7 @@ In this example, the endpoint supports the GET and POST HTTP methods. When the l
 
 ```js
 const express = require('express');
-const AutoAPI = require('auto-api');
+const AutoAPI = require('@honzakubita/autoapi');
 
 const app = express();
 
