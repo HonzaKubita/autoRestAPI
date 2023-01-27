@@ -4,7 +4,11 @@ AutoAPI is a simple utility for automatically mapping and registering endpoints 
 
 ## Instalation
 
-Unfortunately I didn't create an npm package for this yet. So you have to manually download the [main.js](https://github.com/HonzaKubita/AutoAPI/blob/main/main.js) file and rename it to fit your requirements. (In examples I assume you renamed it to `autoapi.js`)
+Via npm:
+
+```
+npm i @honzakubita/autoapi
+```
 
 ## Usage
 
