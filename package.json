@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "https://github.com/HonzaKubita/AutoAPI",
   "author": "Honza Kubita <honza.kubita@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
