@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+const p = require('path');
 
 let endpoints = [];
 let express = null;
@@ -14,9 +14,12 @@ function mapDir(path) {
     const script = require(`${path}/${file}`);
     const fileName = file.replace(".js", "");
 
+    let url = `${path}/${fileName}`;
+    url = url.replace(config.src, "");
+
     let endpointObject = {
       script: script,           // Object from the file
-      url: (`${path.replace(".", "")}/${fileName}`), // Url in the api
+      url: url,                     // Url in the api
       path: (`${path}/${file}`),    // Path to the source file
       methods: [],                  // Supported http methods
     }
@@ -53,8 +56,8 @@ module.exports = AutoAPI = (expressApp, conf = {}) => {
 
   express = expressApp;
   config.src = conf.src?? "./api";
-  if (!path.isAbsolute(config.src)){
-    config.src = path.join(path.dirname(module.parent.filename), config.src);
+  if (!p.isAbsolute(config.src)){
+    config.src = p.join(p.dirname(module.parent.filename), config.src);
   }
 
   mapDir(config.src);
