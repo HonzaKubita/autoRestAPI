@@ -56,7 +56,6 @@ module.exports = AutoAPI = (expressApp, conf = {}) => {
   if (!path.isAbsolute(config.src)){
     config.src = path.join(path.dirname(module.parent.filename), config.src);
   }
-  console.log(config.src);
 
   mapDir(config.src);
   registerEndpoints();
