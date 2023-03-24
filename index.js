@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 let endpoints = [];
 let express = null;
@@ -52,6 +53,10 @@ module.exports = AutoAPI = (expressApp, conf = {}) => {
 
   express = expressApp;
   config.src = conf.src?? "./api";
+  if (!path.isAbsolute(config.src)){
+    config.src = path.join(path.dirname(module.parent.filename), config.src);
+  }
+  console.log(config.src);
 
   mapDir(config.src);
   registerEndpoints();
