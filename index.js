@@ -52,7 +52,7 @@ function registerEndpoints() {
   });
 }
 
-module.exports = AutoAPI = (expressApp, conf = {}) => {
+module.exports = autoRestAPI = (expressApp, conf = {}) => {
 
   express = expressApp;
   config.src = conf.src?? "./api";
