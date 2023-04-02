@@ -7,7 +7,7 @@ fastRest is a simple utility for automatically mapping and registering endpoints
 Via npm:
 
 ```
-npm i fastRest
+npm i fastrest
 ```
 
 ## Usage
