@@ -15,6 +15,9 @@ function mapDir(path) {
     const fileName = file.replace(".js", "");
 
     let url = `${path}/${fileName}`;
+    if (fileName == 'index')
+      url = `${path}/`
+
     url = url.replace(config.src, "");
 
     let endpointObject = {
