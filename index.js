@@ -13,6 +13,8 @@ function mapDir(path) {
   endpointFiles.forEach(file => { // Map all endpoint files
     const script = require(`${path}/${file}`);
     const fileName = file.replace(".js", "");
+    
+    if (fileName.includes("$")) return;
 
     let url = `${path}/${fileName}`;
     if (fileName == 'index')
