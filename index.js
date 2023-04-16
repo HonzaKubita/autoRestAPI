@@ -15,7 +15,7 @@ function mapDir(path) {
     const fileName = file.replace(".js", "");
 
     let url = `${path}/${fileName}`;
-    if (fileName == 'index')
+    if (fileName === 'index')
       url = `${path}/`
 
     url = url.replace(config.src, "");
@@ -25,6 +25,7 @@ function mapDir(path) {
       url: url,                     // Url in the api
       path: (`${path}/${file}`),    // Path to the source file
       methods: [],                  // Supported http methods
+      middleware: null              // Endpoints middleware
     }
 
     const httpMethods = ['get', 'head', 'post', 'put', 'delete', 'options', 'trace', 'patch'];
@@ -36,6 +37,11 @@ function mapDir(path) {
         }
       }
     });
+
+    // Add middleware reference to the endpointObject
+    if (script.middleware) {
+      endpointObject.middleware = script.middleware;
+    }
 
     endpoints.push(endpointObject); // Add endpoint to main endpoints array
 
@@ -55,6 +61,27 @@ function registerEndpoints() {
   });
 }
 
+function linkMiddleware() {
+  endpoints.forEach(endpoint => {
+    if (!endpoint.middleware) return; // Skip endpoints that have no middleware
+
+    if (Array.isArray(endpoint.middleware)) { // If middleware is array of middleware functions
+      endpoint.middleware.forEach(middleware => {
+        express.use(endpoint.url, middleware);
+      });
+    }
+
+    else { // If middleware has different middleware for different methods
+      Object.keys(endpoint.middleware).forEach(method => {
+        endpoint.middleware[method].forEach(middleware => {
+          express[method](endpoint.url, middleware);
+        })
+      });
+    }
+
+  });
+}
+
 module.exports = autoRestAPI = (expressApp, conf = {}) => {
 
   express = expressApp;
@@ -64,6 +91,7 @@ module.exports = autoRestAPI = (expressApp, conf = {}) => {
   }
 
   mapDir(config.src);
+  linkMiddleware();
   registerEndpoints();
 
 }

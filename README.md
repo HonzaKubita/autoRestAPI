@@ -71,6 +71,44 @@ module.exports = {
 
 In this example, the endpoint supports the GET and POST HTTP methods. When the load() method is called, autoRestAPI will automatically register these methods with Express.js and map them to the correct URL based on the file's location within the src directory.
 
+## Middleware
+
+Endpoint middleware can be defined in each endpoint file. Middleware can be universal for the whole route or just for a specific method.
+Middleware is always an array of functions. (So you can use multiple)
+
+Example usage:
+
+Defining middleware for the whole endpoint:
+```js
+import someMiddleware from './someMiddleware';
+
+module.exports = {
+  get: (req, res) => {
+    res.send({ message: 'Hello, World!' });
+  },
+  post: (req, res) => {
+    res.send({ message: 'Received a POST request' });
+  },
+  middleware: [someMiddleware]
+};
+```
+
+Defining middleware for a specific method:
+```js
+import somePostMiddleware from './somePostMiddleware';
+
+module.exports = {
+  get: (req, res) => {
+    res.send({ message: 'Hello, World!' });
+  },
+  post: (req, res) => {
+    res.send({ message: 'Received a POST request' });
+  },
+  middleware: {
+    post: [somePostMiddleware]
+  }
+};
+```
 ## Full inplementation example
 
 ```js
