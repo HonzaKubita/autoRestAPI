@@ -1,6 +1,6 @@
 {
   "name": "autorestapi",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "autoRestAPI is a simple utility for automatically mapping and registering endpoints in an Express.js application. It allows you to organize your endpoints in a directory structure and automatically register them with the Express.js app, without the need to manually import and register each endpoint.",
   "main": "index.js",
   "repository": "https://github.com/HonzaKubita/AutoAPI",
