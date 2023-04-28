@@ -28,7 +28,7 @@ function mapDir(path) {
       middleware: null              // Endpoints middleware
     }
 
-    const httpMethods = ['get', 'head', 'post', 'put', 'delete', 'options', 'trace', 'patch'];
+    const httpMethods = ['get', 'head', 'post', 'put', 'delete', 'options', 'trace', 'patch', 'connect'];
 
     httpMethods.forEach(method => { // Map all supported http methods
       if (method in endpointObject.script) {
